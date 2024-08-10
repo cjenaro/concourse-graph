@@ -9,11 +9,24 @@ const GithubCommitActivitySchema = z.array(
 	}),
 )
 
-function getDay(timestamp: number) {
-	const formatter = new Intl.DateTimeFormat('en-US')
-	const date = new Date(timestamp * 1000)
+function getDay(timestamp: number, idx: number) {
+	const formatter = new Intl.DateTimeFormat('en-US', {
+    month: 'long',
+    day: 'numeric'
+  })
+	const date = new Date(timestamp * 1000 + (idx * 24 * 60 * 60 * 1000))
+  let suffix = 'st'
+  const dayString = date.getDate().toString()
+  const lastDigit = Number(dayString[dayString.length - 1])
+  if (lastDigit > 3) {
+    suffix = 'th'
+  } else if (lastDigit > 2) {
+    suffix = 'rd'
+  } else if (lastDigit > 1) {
+    suffix = 'nd'
+  }
 
-	return formatter.format(date)
+	return formatter.format(date) + suffix
 }
 
 type LoaderResponse = {
@@ -94,7 +107,8 @@ function App() {
 									{days.map((day, idx) => (
 										<span
 											key={`${week}-${idx}`}
-											className={`cell level-${getCommitsLevel(levels, day)}`}
+											className={`cell tooltip level-${getCommitsLevel(levels, day)}`}
+                      data-tooltip={`${day === 0 ? 'No' : day} contributions on ${getDay(week, idx)}`}
 										/>
 									))}
 								</li>

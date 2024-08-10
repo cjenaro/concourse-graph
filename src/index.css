@@ -1,15 +1,4 @@
 :root {
-	font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-	line-height: 1.5;
-	font-weight: 400;
-
-	color-scheme: light dark;
-	color: rgba(255, 255, 255, 0.87);
-	background-color: #0d1117;
-	font-synthesis: none;
-	text-rendering: optimizeLegibility;
-	-webkit-font-smoothing: antialiased;
-	-moz-osx-font-smoothing: grayscale;
 
 	--l0-commits: #161b22;
 	--l1-commits: #0e4429;
@@ -17,6 +6,20 @@
 	--l3-commits: #26a641;
 	--l4-commits: #39d353;
 	--container-maxw: 780px;
+	--bg-color:  #0d1117;
+	--tooltip-bg: #151b25;
+
+	font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+	line-height: 1.5;
+	font-weight: 400;
+
+	color-scheme: light dark;
+	color: rgba(255, 255, 255, 0.87);
+	background-color: var(--bg-color);
+	font-synthesis: none;
+	text-rendering: optimizeLegibility;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
 }
 
 body {
@@ -43,6 +46,45 @@ h1 {
 	border-radius: 2px;
 	width: var(--size);
 	background-color: var(--l0-commits);
+	position: relative;
+}
+
+.tooltip::before,
+.tooltip::after {
+	content: attr(data-tooltip);
+	position: absolute;
+	padding: 2px;
+	opacity: 0;
+	transform: translate(-50%, 0);
+	transition: transform 0.3s ease, opacity 0.3s ease;
+	background-color: var(--tooltip-bg);
+	z-index: 2;
+	border-radius: 5px;
+	width: max-content;
+	padding: 8px;
+	bottom: 0;
+	left: 50%;
+	pointer-events: none;
+}
+
+.tooltip::before {
+	content: '';
+	transform: translate(-50%, 0) rotate(45deg);
+	width: var(--size);
+	height: var(--size);
+	z-index: 1;
+	padding: 0;
+	border-radius: 2px;
+}
+
+.tooltip:hover::before {
+	opacity: 1;
+	transform:  translate(-50%, calc(var(--size) * -1)) rotate(45deg);
+}
+
+.tooltip:hover::after {
+	opacity: 1;
+	transform: translate(-50%, calc(var(--size) * -1.5));
 }
 
 .cell,
