@@ -1,4 +1,4 @@
-import type { Config } from '@netlify/functions'
+import '@netlify/functions'
 import { z } from 'zod'
 
 const MessagesSchema = z.array(z.string())
@@ -17,10 +17,6 @@ export default async (request: Request) => {
 			'Content-Type': 'application/json',
 		},
 	})
-}
-
-export const config: Config = {
-	path: '/openapi',
 }
 
 export async function getWhatWasWorkedOn(messages: string[]) {

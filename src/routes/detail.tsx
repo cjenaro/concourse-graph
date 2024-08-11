@@ -65,7 +65,7 @@ const OpenAPIResponseSchema = z.object({
 
 export const action: ActionFunction = async ({ request }) => {
 	const data = await request.formData()
-	const response = await fetch('/openapi', {
+	const response = await fetch('/api/openapi', {
 		method: 'POST',
 		body: data,
 	}).then((blob) => blob.json())
