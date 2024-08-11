@@ -54,7 +54,7 @@ export function getDay(timestamp: number, idx: number) {
 	let suffix = 'st'
 	const dayString = date.getUTCDate().toString()
 	const lastDigit = Number(dayString[dayString.length - 1])
-	if (lastDigit > 3 || lastDigit === 0) {
+	if (lastDigit > 3 || lastDigit === 0 || (Number(dayString) < 20 && Number(dayString) > 10)) {
 		suffix = 'th'
 	} else if (lastDigit > 2) {
 		suffix = 'rd'
