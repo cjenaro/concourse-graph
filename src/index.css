@@ -1,12 +1,11 @@
 :root {
-
 	--l0-commits: #161b22;
 	--l1-commits: #0e4429;
 	--l2-commits: #006d32;
 	--l3-commits: #26a641;
 	--l4-commits: #39d353;
 	--container-maxw: 780px;
-	--bg-color:  #0d1117;
+	--bg-color: #0d1117;
 	--tooltip-bg: #151b25;
 
 	font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
@@ -39,6 +38,7 @@ h1 {
 	max-width: var(--container-maxw);
 	width: 100%;
 	margin: 0 auto;
+	--size: 10px;
 	--gap: 4px;
 }
 
@@ -56,7 +56,9 @@ h1 {
 	padding: 2px;
 	opacity: 0;
 	transform: translate(-50%, 0);
-	transition: transform 0.3s ease, opacity 0.3s ease;
+	transition:
+		transform 0.3s ease,
+		opacity 0.3s ease;
 	background-color: var(--tooltip-bg);
 	z-index: 2;
 	border-radius: 5px;
@@ -79,7 +81,7 @@ h1 {
 
 .tooltip:hover::before {
 	opacity: 1;
-	transform:  translate(-50%, calc(var(--size) * -1)) rotate(45deg);
+	transform: translate(-50%, calc(var(--size) * -1)) rotate(45deg);
 }
 
 .tooltip:hover::after {
@@ -89,13 +91,26 @@ h1 {
 
 .cell,
 .day-cell {
-	--size: 10px;
 	display: block;
 	height: var(--size);
 	line-height: var(--size);
 }
 
+.months {
+	font-size: 12px;
+	margin-left: calc(var(--gap) + var(--first-col-width));
+	display: grid;
+	grid-template-columns: repeat(52, var(--size));
+	grid-template-rows: 1fr;
+	gap: var(--gap);
+}
+
+.months span {
+	grid-column: span var(--span);
+}
+
 .graph {
+	--first-col-width: 4ch;
 	border: 1px solid #30363d;
 	border-radius: 6px;
 	padding: 10px;
@@ -109,7 +124,7 @@ h1 {
 	display: flex;
 	gap: var(--gap);
 	width: max-content;
-	align-items:center;
+	align-items: center;
 }
 
 .weeks {
@@ -128,7 +143,7 @@ h1 {
 }
 
 .weeks li:first-of-type {
-	margin-right: 5px;
+	width: var(--first-col-width);
 }
 
 .level-1 {
