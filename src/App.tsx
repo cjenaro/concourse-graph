@@ -1,3 +1,4 @@
+import { CSSProperties, useState } from 'react'
 import { json, LoaderFunction, useLoaderData } from 'react-router-dom'
 import { z } from 'zod'
 
@@ -33,7 +34,6 @@ type LoaderResponse = {
 	githubData?: z.infer<typeof GithubCommitActivitySchema>
 	monthLabels?: { label?: string; spans: number }[]
 	max?: number
-	title?: string
 	error?: string
 }
 
@@ -79,7 +79,6 @@ export const loader: LoaderFunction = async () => {
 	monthLabels.push({ label: lastMonth, spans })
 
 	return json<LoaderResponse>({
-		title: 'Concourse',
 		githubData: result.data,
 		monthLabels,
 		max,
@@ -112,22 +111,34 @@ function getMonthLabel(date: Date) {
 	return formatter.format(date)
 }
 
+function getActiveClassName(levels: number, day: number, activeLevel?: number) {
+	if (activeLevel === undefined) return
+	return activeLevel !== getCommitsLevel(levels, day) ? 'disabled' : 'active'
+}
+
 function App() {
+	const [activeLevel, setActiveLevel] = useState<number | undefined>()
 	const data = useLoaderData() as LoaderResponse
 
 	const levels = Math.floor((data?.max ?? 0) / 4)
+
+	function handleLevelFilter(level: number) {
+		return () => {
+			setActiveLevel(level)
+		}
+	}
 	return (
 		<div className="container">
 			{data.error ? (
 				<p>{data.error}</p>
 			) : (
 				<>
-					<h1>{data.title}</h1>
-					<p>{data.max} was the max commits in a day</p>
+					<h1>Concourse</h1>
+					<p>There were a maximum of {data.max} commits in any single day</p>
 					<div className="graph">
 						<div className="months">
 							{data.monthLabels?.map(({ label, spans }, idx) => (
-								<span key={`${idx}${label}`} style={{ '--span': spans }}>
+								<span key={`${idx}${label}`} style={{ '--span': spans } as CSSProperties}>
 									{label}
 								</span>
 							))}
@@ -148,7 +159,7 @@ function App() {
 										{days.map((day, idx) => (
 											<span
 												key={`${week}-${idx}`}
-												className={`cell tooltip level-${getCommitsLevel(levels, day)}`}
+												className={`cell tooltip level-${getCommitsLevel(levels, day)} ${getActiveClassName(levels, day, activeLevel)}`}
 												data-tooltip={`${day === 0 ? 'No' : day} contributions on ${getDay(week, idx)}`}
 											/>
 										))}
@@ -157,11 +168,38 @@ function App() {
 							</ul>
 						) : null}
 						<p className="comparison">
-							Less<span className="cell level-5"></span>
-							<span className="cell level-1"></span>
-							<span className="cell level-2"></span>
-							<span className="cell level-3"></span>
-							<span className="cell level-4"></span>More
+							Less
+							<button
+								onClick={handleLevelFilter(0)}
+								className={`cell level-0 ${activeLevel === 0 ? 'active' : ''}`}
+							>
+								<div className="sr-only">Filter by level 0</div>
+							</button>
+							<button
+								onClick={handleLevelFilter(1)}
+								className={`cell level-1 ${activeLevel === 1 ? 'active' : ''}`}
+							>
+								<div className="sr-only">Filter by level 1</div>
+							</button>
+							<button
+								onClick={handleLevelFilter(2)}
+								className={`cell level-2 ${activeLevel === 2 ? 'active' : ''}`}
+							>
+								<div className="sr-only">Filter by level 2</div>
+							</button>
+							<button
+								onClick={handleLevelFilter(3)}
+								className={`cell level-3 ${activeLevel === 3 ? 'active' : ''}`}
+							>
+								<div className="sr-only">Filter by level 3</div>
+							</button>
+							<button
+								onClick={handleLevelFilter(4)}
+								className={`cell level-4 ${activeLevel === 4 ? 'active' : ''}`}
+							>
+								<div className="sr-only">Filter by level 4</div>
+							</button>
+							More
 						</p>
 					</div>
 				</>

@@ -43,10 +43,20 @@ h1 {
 }
 
 .cell {
+	border: 0;
+	padding: 0;
+	cursor: pointer;
 	border-radius: 2px;
 	width: var(--size);
 	background-color: var(--l0-commits);
 	position: relative;
+	outline-offset: -1px;
+	outline: 1px solid transparent;
+	transition: opacity 0.3s ease, outline-color 0.3s ease;
+}
+
+.cell.active {
+	outline-color: #fff2;
 }
 
 .tooltip::before,
@@ -87,6 +97,11 @@ h1 {
 .tooltip:hover::after {
 	opacity: 1;
 	transform: translate(-50%, calc(var(--size) * -1.5));
+}
+
+.cell.disabled {
+	pointer-events: none;
+	opacity: 0.2;
 }
 
 .cell,
@@ -160,6 +175,17 @@ h1 {
 
 .level-4 {
 	background-color: var(--l4-commits);
+}
+
+.sr-only {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	padding: 0;
+	overflow: hidden;
+	clip: rect(0, 0, 0, 0);
+	word-wrap: normal;
+	border: 0;
 }
 
 @media (prefers-color-scheme: light) {
