@@ -308,6 +308,10 @@ h1 {
 	border: 1px solid var(--border-color);
 }
 
+.commit > a > svg {
+	margin-left: 5px;
+}
+
 .commit img {
 	border-radius: 50%;
 }

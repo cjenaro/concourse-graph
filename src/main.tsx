@@ -1,7 +1,7 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
-import App, { loader } from './App.tsx'
+import Home, { loader } from './routes/home.tsx'
 import './index.css'
 import SingleDayDetails, {
 	loader as singleDayDetailsLoader,
@@ -11,7 +11,7 @@ import SingleDayDetails, {
 const router = createBrowserRouter([
 	{
 		path: '/',
-		element: <App />,
+		element: <Home />,
 		loader,
 		children: [
 			{
