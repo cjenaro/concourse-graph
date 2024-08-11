@@ -100,7 +100,7 @@ h1 {
 .tooltip:hover::before {
 	opacity: 1;
 	transform: translate(
-		    calc(-50% + var(--x-translation)),
+			calc(-50% + var(--x-translation)),
 			calc(var(--size) * -1)
 		)
 		rotate(45deg);

@@ -1,3 +1,4 @@
+import { redirect } from 'react-router-dom'
 import { z } from 'zod'
 
 export const GithubCommitActivitySchema = z.array(
@@ -5,6 +6,42 @@ export const GithubCommitActivitySchema = z.array(
 		total: z.number(),
 		days: z.array(z.number()).length(7),
 		week: z.number(),
+	}),
+)
+
+export const GithubCommitActivitySingleDaySchema = z.array(
+	z.object({
+		url: z.string().url(),
+		sha: z.string(),
+		html_url: z.string().url(),
+		commit: z.object({
+			url: z.string().url(),
+			author: z.object({
+				name: z.string(),
+				email: z.string(),
+				date: z.string(),
+			}),
+			message: z.string(),
+			comment_count: z.number(),
+		}),
+		author: z.object({
+			avatar_url: z.string().url(),
+			gists_url: z.string(),
+			html_url: z.string().url(),
+			id: z.number(),
+			login: z.string(),
+			starred_url: z.string(),
+			name: z.string().optional(),
+			email: z.string().optional(),
+			starred_at: z.string().optional(),
+		}),
+		stats: z
+			.object({
+				additions: z.number(),
+				deletions: z.number(),
+				total: z.number(),
+			})
+			.optional(),
 	}),
 )
 
@@ -36,7 +73,18 @@ export async function fetchSingleDayCommits(week: number, day: number) {
 	params.set('since', since.toISOString())
 	params.set('until', until.toISOString())
 
-	return await fetch(url + '?' + params.toString()).then((blob) => blob.json())
+	const response = await fetch(url + '?' + params.toString()).then((blob) =>
+		blob.json(),
+	)
+
+	const { success, data } =
+		GithubCommitActivitySingleDaySchema.safeParse(response)
+
+	if (!success) {
+		throw redirect('/')
+	}
+
+	return data
 }
 
 export function getCommitsLevel(levelGap: number, dayCommits: number) {
