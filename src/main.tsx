@@ -5,6 +5,7 @@ import App, { loader } from './App.tsx'
 import './index.css'
 import SingleDayDetails, {
 	loader as singleDayDetailsLoader,
+	action as singleDayDetailsAction,
 } from './routes/detail.tsx'
 
 const router = createBrowserRouter([
@@ -17,6 +18,7 @@ const router = createBrowserRouter([
 				path: ':week/:day',
 				element: <SingleDayDetails />,
 				loader: singleDayDetailsLoader,
+				action: singleDayDetailsAction,
 			},
 		],
 	},

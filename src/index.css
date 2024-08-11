@@ -7,6 +7,7 @@
 	--container-maxw: 780px;
 	--bg-color: #0d1117;
 	--tooltip-bg: #151b25;
+	--border-color: #30363d;
 
 	font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
 	line-height: 1.5;
@@ -33,6 +34,7 @@ body,
 #root {
 	margin: 0 auto;
 	padding: 20px;
+	align-items: flex-start;
 }
 
 h1 {
@@ -131,7 +133,7 @@ h1 {
 
 /* Last three weeks */
 .weeks li:nth-last-child(-n + 3) {
-	--x-translation: -40%;
+	--x-translation: -43%;
 }
 
 .cell.disabled {
@@ -162,19 +164,26 @@ h1 {
 
 .graph {
 	--first-col-width: 4ch;
-	border: 1px solid #30363d;
+	border: 1px solid var(--border-color);
 	border-radius: 6px;
 	padding: 10px 10px 30px;
 	width: calc(100dvw - 60px);
 	margin: 0 auto;
 	position: relative;
-	max-width: 100%;
+	max-width: calc(100% - 20px);
 }
 
 .graph-scrollable {
 	max-width: 100%;
 	overflow-x: scroll;
 	overflow-y: hidden;
+}
+
+@media (min-width: 830px) {
+	.graph-scrollable {
+		overflow-x: hidden;
+		overflow-y: hidden;
+	}
 }
 
 .graph-content {
@@ -241,6 +250,29 @@ h1 {
 	border: 0;
 }
 
+.spinner,
+.sparkles {
+	width: 12px;
+	height: 12px;
+}
+
+@keyframes load {
+	from {
+		stroke-dashoffset: 6;
+		transform: rotate(0);
+	}
+	to {
+		stroke-dashoffset: -6;
+		transform: rotate(360deg);
+	}
+}
+
+.spinner .path {
+	stroke-dasharray: 6;
+	animation: load 2s linear infinite;
+	transform-origin: center;
+}
+
 @media (prefers-color-scheme: light) {
 	:root {
 		color: #213547;
@@ -255,4 +287,36 @@ h1 {
 	button {
 		background-color: #f9f9f9;
 	}
+}
+
+/* Commits */
+
+.commits {
+	list-style: none;
+	padding: 0;
+	display: grid;
+	gap: 20px;
+}
+
+.commit {
+	display: grid;
+	grid-template-columns: 1fr auto max-content auto;
+	gap: 5px;
+	justify-items: left;
+	padding: 10px;
+	border-radius: 6px;
+	border: 1px solid var(--border-color);
+}
+
+.commit img {
+	border-radius: 50%;
+}
+
+.commit p {
+	grid-column: -1/1;
+	text-overflow: ellipsis;
+	overflow: hidden;
+	white-space: nowrap;
+	width: 100%;
+	margin: 0;
 }
