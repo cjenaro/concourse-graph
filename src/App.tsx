@@ -122,7 +122,7 @@ function App() {
 
 	const levels = Math.floor((data?.max ?? 0) / 4)
 
-	function handleLevelFilter(level: number) {
+	function handleLevelFilter(level?: number) {
 		return () => {
 			setActiveLevel(level)
 		}
@@ -138,7 +138,10 @@ function App() {
 					<div className="graph">
 						<div className="months">
 							{data.monthLabels?.map(({ label, spans }, idx) => (
-								<span key={`${idx}${label}`} style={{ '--span': spans } as CSSProperties}>
+								<span
+									key={`${idx}${label}`}
+									style={{ '--span': spans } as CSSProperties}
+								>
 									{label}
 								</span>
 							))}
@@ -168,36 +171,45 @@ function App() {
 							</ul>
 						) : null}
 						<p className="comparison">
+							{activeLevel !== undefined ? (
+								<button
+									onClick={handleLevelFilter(undefined)}
+									className={`cell`}
+								>
+									<span>&times;</span>
+									<span className="sr-only">Remove filter</span>
+								</button>
+							) : null}
 							Less
 							<button
 								onClick={handleLevelFilter(0)}
 								className={`cell level-0 ${activeLevel === 0 ? 'active' : ''}`}
 							>
-								<div className="sr-only">Filter by level 0</div>
+								<span className="sr-only">Filter by level 0</span>
 							</button>
 							<button
 								onClick={handleLevelFilter(1)}
 								className={`cell level-1 ${activeLevel === 1 ? 'active' : ''}`}
 							>
-								<div className="sr-only">Filter by level 1</div>
+								<span className="sr-only">Filter by level 1</span>
 							</button>
 							<button
 								onClick={handleLevelFilter(2)}
 								className={`cell level-2 ${activeLevel === 2 ? 'active' : ''}`}
 							>
-								<div className="sr-only">Filter by level 2</div>
+								<span className="sr-only">Filter by level 2</span>
 							</button>
 							<button
 								onClick={handleLevelFilter(3)}
 								className={`cell level-3 ${activeLevel === 3 ? 'active' : ''}`}
 							>
-								<div className="sr-only">Filter by level 3</div>
+								<span className="sr-only">Filter by level 3</span>
 							</button>
 							<button
 								onClick={handleLevelFilter(4)}
 								className={`cell level-4 ${activeLevel === 4 ? 'active' : ''}`}
 							>
-								<div className="sr-only">Filter by level 4</div>
+								<span className="sr-only">Filter by level 4</span>
 							</button>
 							More
 						</p>

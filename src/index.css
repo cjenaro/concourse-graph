@@ -52,7 +52,9 @@ h1 {
 	position: relative;
 	outline-offset: -1px;
 	outline: 1px solid transparent;
-	transition: opacity 0.3s ease, outline-color 0.3s ease;
+	transition:
+		opacity 0.3s ease,
+		outline-color 0.3s ease;
 }
 
 .cell.active {
