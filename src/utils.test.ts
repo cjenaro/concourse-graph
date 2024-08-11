@@ -1,10 +1,5 @@
-import { describe, it, expect, vi } from 'vitest'
-import {
-	getDay,
-	getCommitsLevel,
-	getMonthLabel,
-	getMonthLabels,
-} from './utils'
+import { describe, it, expect } from 'vitest'
+import { getDay, getCommitsLevel, getMonthLabel, getMonthLabels } from './utils'
 
 describe('getDay', () => {
 	it('should return the correct formatted date string with the appropriate suffix', () => {
@@ -61,4 +56,3 @@ describe('getMonthLabels', () => {
 		])
 	})
 })
-
