@@ -1,8 +1,7 @@
-import { CSSProperties, useEffect, useRef, useState } from 'react'
+import { CSSProperties, useRef, useState } from 'react'
 import { LoaderResponse } from '../routes/home'
 import { getCommitsLevel, getDay } from '../utils'
-import { Link, useFetchers, useSearchParams } from 'react-router-dom'
-import useOnboardingContext from '../hooks/use-onboarding-context'
+import { Link } from 'react-router-dom'
 
 type GraphProps = { data: LoaderResponse }
 
@@ -15,32 +14,7 @@ export default function Graph({ data }: GraphProps) {
 	const [activeLevel, setActiveLevel] = useState<number | undefined>()
 	const ref = useRef<HTMLDivElement>(null)
 	const filtersRef = useRef(null)
-	const { addStep } = useOnboardingContext()
-
-	useEffect(() => {
-		;[
-			{
-				id: 'graph',
-				elementRef: ref,
-				message:
-					'Clicking on any element in the graph shows the details of that day.',
-			},
-			{
-				id: 'filters',
-				elementRef: filtersRef,
-				message: 'Select a level to filter on the graph.',
-			},
-		].forEach((step) => addStep(step))
-	}, [])
-
 	const levels = Math.floor((data?.max ?? 0) / 4)
-	const [searchParams] = useSearchParams()
-	const fetchers = useFetchers()
-	const searchFetcher = fetchers.find((f) => f.key === 'search')
-	const repo =
-		searchFetcher && searchFetcher.data
-			? searchFetcher?.data.repo
-			: searchParams.get('repo')
 
 	function handleLevelFilter(level?: number) {
 		return () => {
@@ -80,8 +54,8 @@ export default function Graph({ data }: GraphProps) {
 										{days.map((day, idx) => (
 											<Link
 												key={`${week}-${idx}`}
-												to={`/${week}/${idx}?repo=${repo || ''}`}
-												className={`cell tooltip ${searchFetcher && searchFetcher.state !== 'idle' ? 'loading' : ''} level-${getCommitsLevel(levels, day)} ${getActiveClassName(levels, day, activeLevel)}`}
+												to={`/${week}/${idx}`}
+												className={`cell tooltip level-${getCommitsLevel(levels, day)} ${getActiveClassName(levels, day, activeLevel)}`}
 												data-tooltip={`${day === 0 ? 'No' : day} contributions on ${getDay(week, idx)}`}
 											>
 												<span className="sr-only">

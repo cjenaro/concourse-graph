@@ -4,9 +4,7 @@ import {
 	LoaderFunction,
 	redirect,
 	useFetcher,
-	useFetchers,
 	useLoaderData,
-	useLocation,
 	useNavigation,
 } from 'react-router-dom'
 import {
@@ -30,17 +28,15 @@ type LoaderData = {
 	data: z.infer<typeof GithubCommitActivitySingleDaySchema>
 }
 
-export const loader: LoaderFunction = async ({ params, request }) => {
+export const loader: LoaderFunction = async ({ params }) => {
 	const parsedParams = WeekDayParamsSchema.safeParse(params)
-	const searchParams = new URL(request.url).searchParams
-	const repo = searchParams.get('repo') || undefined
 
 	if (!parsedParams.success) {
 		return redirect('/')
 	}
 
 	const { week, day } = parsedParams.data
-	const data = await fetchSingleDayCommits(week, day, repo)
+	const data = await fetchSingleDayCommits(week, day)
 
 	return json({ data })
 }
@@ -71,29 +67,35 @@ const OpenAPIResponseSchema = z.object({
 
 export const action: ActionFunction = async ({ request }) => {
 	const data = await request.formData()
-	const response = await fetch('/api/openapi', {
-		method: 'POST',
-		body: data,
-	}).then((blob) => blob.json())
+	try {
+		const response = await fetch('/api/openapi', {
+			method: 'POST',
+			body: data,
+		}).then((blob) => blob.json())
 
-	const result = OpenAPIResponseSchema.safeParse(response)
+		const result = OpenAPIResponseSchema.safeParse(response)
 
-	if (!result.success) {
+		if (!result.success) {
+			throw new Error(result.error.errors.join(','))
+		}
+
+		const [choice] = result.data?.choices
+
+		return json({ summary: choice.message.content })
+	} catch (error) {
 		return json({
-			error: 'Could not fetch the open api response',
+			error:
+				error instanceof Error
+					? error.message
+					: 'There was an error in the details page',
 		})
 	}
-
-	const [choice] = result.data?.choices
-
-	return json({ summary: choice.message.content })
 }
 
 export default function SingleDayDetails() {
 	const navigation = useNavigation()
 	const { data: commits } = useLoaderData() as LoaderData
-	const location = useLocation()
-	const fetcher = useFetcher({ key: 'commits-fetcher' })
+	const fetcher = useFetcher({ key: 'ai-fetcher' })
 	const actionData = fetcher.data as { summary?: string; error?: string }
 
 	const [fetcherData, setFetcherData] = useState<typeof actionData | null>(
@@ -111,23 +113,13 @@ export default function SingleDayDetails() {
 		setFetcherData(null)
 	}, [navigation.location?.hash])
 
-	const fetchers = useFetchers()
-	const searchFetcher = fetchers.find((f) => f.key === 'search')
-
-	useEffect(() => {
-		if (location?.pathname) {
-			const search = searchFetcher?.data.repo
-				? '?repo=' + searchFetcher?.data.repo
-				: location.search
-			fetcher.load(location?.pathname + search)
-		}
-	}, [searchFetcher?.data?.repo])
-
 	return (
 		<div className="details-page">
 			<fetcher.Form method="post">
 				<button type="submit" disabled={fetcher.state !== 'idle'}>
-					What was worked on this day?{' '}
+					{fetcherData?.error
+						? 'There was an error, try again. '
+						: 'AI Summary '}
 					{fetcher.state !== 'idle' ? <Spinner /> : <Sparkles />}
 				</button>
 				{commits.map(({ commit }) => (

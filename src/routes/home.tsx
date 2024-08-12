@@ -1,20 +1,11 @@
-import {
-	json,
-	LoaderFunction,
-	Outlet,
-	useFetcher,
-	useLoaderData,
-	useSearchParams,
-} from 'react-router-dom'
+import { json, LoaderFunction, Outlet, useLoaderData } from 'react-router-dom'
 import { z } from 'zod'
 import {
 	fetchCommitActivity,
 	getMonthLabels,
 	GithubCommitActivitySchema,
-	REPOSITORIES,
 } from '../utils'
 import Graph from '../components/graph'
-import { OnboardingProvider } from '../hooks/use-onboarding-context'
 import { useAnimatedDayText } from '../hooks/use-animated-day-text'
 
 export type LoaderResponse = {
@@ -22,7 +13,6 @@ export type LoaderResponse = {
 	monthLabels?: { label?: string; spans: number }[]
 	max?: number
 	error?: string
-	repo?: string | null
 }
 
 export function HomeErrorElement() {
@@ -35,10 +25,8 @@ export function HomeErrorElement() {
 	)
 }
 
-export const loader: LoaderFunction = async ({ request }) => {
-	const params = new URL(request.url).searchParams
-	const repo = params.get('repo')
-	const result = await fetchCommitActivity(repo ? repo : undefined)
+export const loader: LoaderFunction = async () => {
+	const result = await fetchCommitActivity()
 
 	if (!result.success) {
 		return json<LoaderResponse>({
@@ -55,46 +43,20 @@ export const loader: LoaderFunction = async ({ request }) => {
 		githubData: result.data,
 		monthLabels: getMonthLabels(result.data),
 		max,
-		repo,
 	})
 }
 
 function Home() {
 	const data = useLoaderData() as LoaderResponse
 	const title = useAnimatedDayText()
-	const [params, setParams] = useSearchParams()
-	const fetcher = useFetcher({ key: 'search' })
 
 	return (
-		<OnboardingProvider>
-			<div className="container">
-				<h1>Concourse</h1>
-				<fetcher.Form method="get" className="search">
-					<select
-						onChange={(e) => {
-							const repo = e.target.value;
-							params.set('repo', repo)
-							setParams(params)
-							fetcher.load(`/?repo=${e.target.value}`)}}
-						name="repo"
-						defaultValue={params.get('repo') || undefined}
-					>
-						{REPOSITORIES.map((repo) => (
-							<option value={repo} key={repo}>
-								{repo}
-							</option>
-						))}
-					</select>
-				</fetcher.Form>
-				{data.error ? (
-					<p>{data.error}</p>
-				) : (
-					<Graph data={fetcher.data || data} />
-				)}
-				{title ? title : null}
-				<Outlet />
-			</div>
-		</OnboardingProvider>
+		<div className="container">
+			<h1>Concourse</h1>
+			{data.error ? <p>{data.error}</p> : <Graph data={data} />}
+			{title ? title : null}
+			<Outlet />
+		</div>
 	)
 }
 
