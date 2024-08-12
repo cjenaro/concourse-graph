@@ -4,7 +4,9 @@ import {
 	LoaderFunction,
 	redirect,
 	useFetcher,
+	useFetchers,
 	useLoaderData,
+	useLocation,
 	useNavigation,
 } from 'react-router-dom'
 import {
@@ -28,15 +30,17 @@ type LoaderData = {
 	data: z.infer<typeof GithubCommitActivitySingleDaySchema>
 }
 
-export const loader: LoaderFunction = async ({ params }) => {
+export const loader: LoaderFunction = async ({ params, request }) => {
 	const parsedParams = WeekDayParamsSchema.safeParse(params)
+	const searchParams = new URL(request.url).searchParams
+	const repo = searchParams.get('repo') || undefined
 
 	if (!parsedParams.success) {
 		return redirect('/')
 	}
 
 	const { week, day } = parsedParams.data
-	const data = await fetchSingleDayCommits(week, day)
+	const data = await fetchSingleDayCommits(week, day, repo)
 
 	return json({ data })
 }
@@ -88,6 +92,7 @@ export const action: ActionFunction = async ({ request }) => {
 export default function SingleDayDetails() {
 	const { data } = useLoaderData() as LoaderData
 	const navigation = useNavigation()
+	const location = useLocation()
 	const fetcher = useFetcher()
 	const actionData = fetcher.data as { summary?: string; error?: string }
 
@@ -105,6 +110,20 @@ export default function SingleDayDetails() {
 	useEffect(() => {
 		setFetcherData(null)
 	}, [navigation.location?.hash])
+
+	const fetchers = useFetchers()
+	const searchFetcher = fetchers.find((f) => f.key === 'search')
+
+	useEffect(() => {
+		if (location?.pathname) {
+			const search = searchFetcher?.data.repo
+				? '?repo=' + searchFetcher?.data.repo
+				: location.search
+			fetcher.load(location?.pathname + search)
+		}
+	}, [searchFetcher?.data?.repo])
+
+	const commits = fetcher?.data?.data as LoaderData['data'] || data
 
 	return (
 		<div className="details-page">
@@ -124,7 +143,7 @@ export default function SingleDayDetails() {
 			</fetcher.Form>
 			{summary}
 			<ul className="commits">
-				{data?.map((commit, idx) => (
+				{commits?.map((commit, idx) => (
 					<CommitMessage key={commit.sha} commit={commit} delay={idx} />
 				))}
 			</ul>

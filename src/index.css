@@ -65,17 +65,17 @@ h1 {
 	outline-offset: -1px;
 	outline: 1px solid transparent;
 	transition:
-	    background-color 0.3s ease,
+		background-color 0.3s ease,
 		opacity 0.3s ease,
 		outline-color 0.3s ease;
 }
 
 @keyframes pulse {
 	from {
-		opacity: 1
+		opacity: 1;
 	}
 	to {
-		opacity: 0.3
+		opacity: 0.3;
 	}
 }
 
