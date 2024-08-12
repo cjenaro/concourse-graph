@@ -1,5 +1,4 @@
 import { useFetcher, useNavigation } from 'react-router-dom'
-import { useAnimatedSummaryText } from '../hooks/use-animated-summary-text'
 import { useEffect, useState } from 'react'
 import Spinner from './spinner'
 import Sparkles from './sparkles'
