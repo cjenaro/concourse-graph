@@ -370,7 +370,7 @@ button {
 .commit {
 	--delay: 0;
 	display: grid;
-	grid-template-columns: 1fr auto max-content auto;
+	grid-template-columns: 1fr auto auto auto;
 	gap: 5px;
 	justify-items: left;
 	padding: 10px;
