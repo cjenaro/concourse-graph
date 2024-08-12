@@ -14,6 +14,16 @@ export type LoaderResponse = {
 	error?: string
 }
 
+export function HomeErrorElement() {
+	return (
+		<div>
+			<p>
+				There was an error while loading the data needed to render the graph :/
+			</p>
+		</div>
+	)
+}
+
 export const loader: LoaderFunction = async () => {
 	const result = await fetchCommitActivity()
 

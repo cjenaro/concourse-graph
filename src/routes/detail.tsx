@@ -6,6 +6,7 @@ import {
 	useFetcher,
 	useLoaderData,
 	useNavigation,
+	useParams,
 } from 'react-router-dom'
 import {
 	fetchSingleDayCommits,
@@ -63,6 +64,20 @@ const OpenAPIResponseSchema = z.object({
 	}),
 })
 
+function useDayFromParams() {
+	const params = useParams()
+	const { week, day } = WeekDayParamsSchema.parse(params)
+	const date = new Date(week * 1000 + day * 24 * 60 * 60 * 1000)
+	const formatter = new Intl.DateTimeFormat('en-US', {
+		timeZone: 'UTC',
+		month: 'long',
+		day: 'numeric',
+		year: 'numeric',
+	})
+
+	return formatter.format(date)
+}
+
 export const action: ActionFunction = async ({ request }) => {
 	const data = await request.formData()
 	const response = await fetch('/api/openapi', {
@@ -91,6 +106,7 @@ export default function SingleDayDetails() {
 	const navigation = useNavigation()
 	const fetcher = useFetcher()
 	const actionData = fetcher.data as { summary?: string; error?: string }
+	const day = useDayFromParams()
 
 	const [fetcherData, setFetcherData] = useState<typeof actionData | null>(
 		actionData,
@@ -107,7 +123,7 @@ export default function SingleDayDetails() {
 
 	return (
 		<>
-			<h3>Details:</h3>
+			<h3>Details for {day}:</h3>
 			<fetcher.Form method="post">
 				<button type="submit" disabled={fetcher.state !== 'idle'}>
 					What was worked on this day?{' '}
@@ -143,5 +159,14 @@ export default function SingleDayDetails() {
 				))}
 			</ul>
 		</>
+	)
+}
+
+export function SingleDayDetailsErrorElement() {
+	const day = useDayFromParams()
+	return (
+		<div>
+			<p>There was an error while fetching the data for the day {day}</p>
+		</div>
 	)
 }
