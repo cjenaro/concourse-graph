@@ -3,21 +3,16 @@ import {
 	json,
 	LoaderFunction,
 	redirect,
-	useFetcher,
 	useLoaderData,
-	useNavigation,
 } from 'react-router-dom'
 import {
 	fetchSingleDayCommits,
 	GithubCommitActivitySingleDaySchema,
 } from '../utils'
 import { z } from 'zod'
-import Spinner from '../components/spinner'
-import Sparkles from '../components/sparkles'
-import { useEffect, useState } from 'react'
 import { useDayFromParams } from '../hooks/use-animated-day-text'
-import { useAnimatedSummaryText } from '../hooks/use-animated-summary-text'
 import CommitMessage from '../components/commit-message'
+import AISummary from '../components/ai-summary'
 
 export const WeekDayParamsSchema = z.object({
 	week: z.string().transform(Number),
@@ -93,45 +88,11 @@ export const action: ActionFunction = async ({ request }) => {
 }
 
 export default function SingleDayDetails() {
-	const navigation = useNavigation()
 	const { data: commits } = useLoaderData() as LoaderData
-	const fetcher = useFetcher({ key: 'ai-fetcher' })
-	const actionData = fetcher.data as { summary?: string; error?: string }
-
-	const [fetcherData, setFetcherData] = useState<typeof actionData | null>(
-		actionData,
-	)
-
-	const summary = useAnimatedSummaryText(fetcherData?.summary)
-
-	useEffect(() => {
-		setFetcherData(actionData)
-	}, [actionData])
-
-	/** This is a workaround to clean the state when we navigate to a different day. */
-	useEffect(() => {
-		setFetcherData(null)
-	}, [navigation.location?.hash])
 
 	return (
 		<div className="details-page">
-			<fetcher.Form method="post">
-				<button type="submit" disabled={fetcher.state !== 'idle'}>
-					{fetcherData?.error
-						? 'There was an error, try again. '
-						: 'AI Summary '}
-					{fetcher.state !== 'idle' ? <Spinner /> : <Sparkles />}
-				</button>
-				{commits.map(({ commit }) => (
-					<input
-						key={commit.url}
-						name="messages"
-						type="hidden"
-						value={commit.message}
-					/>
-				))}
-			</fetcher.Form>
-			{summary}
+			<AISummary commits={commits} />
 			<ul className="commits">
 				{commits?.map((commit, idx) => (
 					<CommitMessage key={commit.sha} commit={commit} delay={idx} />

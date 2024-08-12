@@ -208,7 +208,24 @@ h1 {
 	width: max-content;
 }
 
+@keyframes pop {
+	0% {
+		transform: scale(1);
+	}
+	50% {
+		transform: scale(1.1);
+	}
+	100% {
+		transform: scale(1);
+	}
+}
+
+.description {
+	max-width: 50ch;
+}
+
 .comparison {
+	transform-origin: 50% 100%;
 	margin: 0;
 	z-index: 2;
 	font-size: 12px;
@@ -219,6 +236,7 @@ h1 {
 	position: absolute;
 	right: var(--size);
 	bottom: 5px;
+	animation: pop 0.3s 2s ease 2;
 }
 
 .weeks {
@@ -300,6 +318,14 @@ h1 {
 	padding: 5px;
 }
 
+button {
+	background-color: #2c3136;
+	border: 2px solid #3b4148;
+	box-shadow: none;
+	border-radius: 6px;
+	padding: 5px 10px;
+}
+
 @media (prefers-color-scheme: light) {
 	:root {
 		--color: #213547;
@@ -313,6 +339,11 @@ h1 {
 
 	button {
 		background-color: #e5e5e5;
+		border-color: #e7e7e7;
+	}
+
+	.ai-summary {
+		background-color: #0002;
 	}
 }
 
@@ -410,4 +441,25 @@ h1 {
 	left: 50%;
 	transform: translate(-50%);
 	color: white;
+}
+
+.ai-summary {
+	--btn-width: 115px;
+	background-color: #fff2;
+	border-radius: 10px;
+	position: relative;
+	width: var(--btn-width);
+	max-width: 100%;
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-between;
+}
+
+.ai-summary form button {
+	width: var(--btn-width);
+}
+
+.ai-summary p {
+	flex: 1 0 calc(100% - 40px);
+	width: 100%;
 }
