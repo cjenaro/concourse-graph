@@ -1,11 +1,9 @@
 import {
-	Form,
 	json,
 	LoaderFunction,
 	Outlet,
 	useFetcher,
 	useLoaderData,
-	useLocation,
 	useSearchParams,
 } from 'react-router-dom'
 import { z } from 'zod'
@@ -24,7 +22,7 @@ export type LoaderResponse = {
 	monthLabels?: { label?: string; spans: number }[]
 	max?: number
 	error?: string
-	repo: string | null
+	repo?: string | null
 }
 
 export function HomeErrorElement() {
