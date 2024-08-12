@@ -16,6 +16,18 @@ npm install
 npm run dev
 ```
 
+if you want to run the netlify function locally you have to install netlify's cli
+
+```bash
+npm install netlify-cli -g
+```
+
+then add the OPENAPI_KEY env variable to your .env file and finally run
+
+```bash
+netlify dev
+```
+
 ## Features
 
 - We can filter out by activity level in the bottom right of the graph.
