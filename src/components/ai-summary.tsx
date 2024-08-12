@@ -7,6 +7,14 @@ import { GithubCommitActivitySingleDaySchema } from '../utils'
 import { useGSAP } from '@gsap/react'
 import gsap from 'gsap'
 
+function getWidth(fetcherData: { summary?: string; error?: string } | null) {
+	if (fetcherData?.summary) return 'auto'
+
+	if (fetcherData?.error) return 215
+
+	return 113.5
+}
+
 export default function AISummary({
 	commits,
 }: {
@@ -33,18 +41,19 @@ export default function AISummary({
 
 	useGSAP(() => {
 		const tl = gsap.timeline()
+		gsap.set('.ai-summary form button', { width: getWidth(fetcherData) })
 		tl.to('.ai-summary', {
 			duration: 0.3,
 			padding: fetcherData?.summary ? 20 : 0,
 		})
 		tl.to('.ai-summary', {
-			width: fetcherData?.summary ? 'auto' : 115, //'var(--btn-width)',
+			width: getWidth(fetcherData),
 			delay: 0.2,
 			duration: 0.3,
 		})
 		tl.to('.ai-summary', {
 			height: fetcherData?.summary ? 'auto' : 30, //'var(--btn-height)',
- 			duration: 0.3,
+			duration: 0.3,
 		})
 		tl.from('.cancel-ai', {
 			duration: 0.3,
@@ -58,7 +67,7 @@ export default function AISummary({
 				speed: 3,
 			},
 		})
-	}, [fetcherData?.summary])
+	}, [fetcherData])
 
 	return (
 		<div className="ai-summary">
