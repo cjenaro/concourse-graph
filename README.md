@@ -2,6 +2,8 @@
 
 This project was created using the react + typescript vite starter. It's live at [concoursegraph.netlify.app](https://concoursegraph.netlify.app)
 
+![Vite _ React _ TS](https://github.com/user-attachments/assets/aad12408-305b-4c64-b520-abc6e450d081)
+
 ## How to run
 
 ```bash
