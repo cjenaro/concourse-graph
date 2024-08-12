@@ -3,7 +3,9 @@ import {
 	json,
 	LoaderFunction,
 	Outlet,
+	useFetcher,
 	useLoaderData,
+	useLocation,
 	useSearchParams,
 } from 'react-router-dom'
 import { z } from 'zod'
@@ -22,6 +24,7 @@ export type LoaderResponse = {
 	monthLabels?: { label?: string; spans: number }[]
 	max?: number
 	error?: string
+	repo: string | null
 }
 
 export function HomeErrorElement() {
@@ -54,6 +57,7 @@ export const loader: LoaderFunction = async ({ request }) => {
 		githubData: result.data,
 		monthLabels: getMonthLabels(result.data),
 		max,
+		repo,
 	})
 }
 
@@ -61,22 +65,30 @@ function Home() {
 	const data = useLoaderData() as LoaderResponse
 	const title = useAnimatedDayText()
 	const [params] = useSearchParams()
+	const fetcher = useFetcher({ key: 'search' })
 
 	return (
 		<OnboardingProvider>
 			<div className="container">
 				<h1>Concourse</h1>
-				<Form action="/" method="get" className="search">
-					<select name="repo" defaultValue={params.get('repo') || undefined}>
+				<fetcher.Form method="get" className="search">
+					<select
+						onChange={(e) => fetcher.load(`/?repo=${e.target.value}`)}
+						name="repo"
+						defaultValue={params.get('repo') || undefined}
+					>
 						{REPOSITORIES.map((repo) => (
 							<option value={repo} key={repo}>
 								{repo}
 							</option>
 						))}
 					</select>
-					<button type="submit">Select</button>
-				</Form>
-				{data.error ? <p>{data.error}</p> : <Graph data={data} />}
+				</fetcher.Form>
+				{data.error ? (
+					<p>{data.error}</p>
+				) : (
+					<Graph data={fetcher.data || data} />
+				)}
 				{title ? title : null}
 				<Outlet />
 			</div>

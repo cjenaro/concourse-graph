@@ -1,7 +1,7 @@
 import { CSSProperties, useEffect, useRef, useState } from 'react'
 import { LoaderResponse } from '../routes/home'
 import { getCommitsLevel, getDay } from '../utils'
-import { Link } from 'react-router-dom'
+import { Link, useFetchers, useSearchParams } from 'react-router-dom'
 import useOnboardingContext from '../hooks/use-onboarding-context'
 
 type GraphProps = { data: LoaderResponse }
@@ -34,6 +34,13 @@ export default function Graph({ data }: GraphProps) {
 	}, [])
 
 	const levels = Math.floor((data?.max ?? 0) / 4)
+	const [searchParams] = useSearchParams()
+	const fetchers = useFetchers()
+	const searchFetcher = fetchers.find((f) => f.key === 'search')
+	const repo =
+		searchFetcher && searchFetcher.data
+			? searchFetcher?.data.repo
+			: searchParams.get('repo')
 
 	function handleLevelFilter(level?: number) {
 		return () => {
@@ -73,7 +80,7 @@ export default function Graph({ data }: GraphProps) {
 										{days.map((day, idx) => (
 											<Link
 												key={`${week}-${idx}`}
-												to={`/${week}/${idx}`}
+												to={`/${week}/${idx}?repo=${repo || ''}`}
 												className={`cell tooltip level-${getCommitsLevel(levels, day)} ${getActiveClassName(levels, day, activeLevel)}`}
 												data-tooltip={`${day === 0 ? 'No' : day} contributions on ${getDay(week, idx)}`}
 											>

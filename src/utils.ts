@@ -69,8 +69,16 @@ export function getDay(timestamp: number, idx: number) {
 	return formatter.format(date) + ' ' + dayString + suffix
 }
 
-export async function fetchSingleDayCommits(week: number, day: number) {
-	const url = 'https://api.github.com/repos/facebook/react/commits'
+export async function fetchSingleDayCommits(
+	week: number,
+	day: number,
+	repo = 'facebook/react',
+) {
+	if (!REPOSITORIES.includes(repo)) {
+		throw new Error('Pick one of the allowed repositories.')
+	}
+
+	const url = `https://api.github.com/repos/${repo}/commits`
 	const params = new URLSearchParams()
 	const since = new Date(week * 1000 + day * 24 * 60 * 60 * 1000)
 	const until = new Date(week * 1000 + (day + 1) * 24 * 60 * 60 * 1000)
