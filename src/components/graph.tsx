@@ -81,7 +81,7 @@ export default function Graph({ data }: GraphProps) {
 											<Link
 												key={`${week}-${idx}`}
 												to={`/${week}/${idx}?repo=${repo || ''}`}
-												className={`cell tooltip level-${getCommitsLevel(levels, day)} ${getActiveClassName(levels, day, activeLevel)}`}
+												className={`cell tooltip ${searchFetcher && searchFetcher.state !== 'idle' ? 'loading' : ''} level-${getCommitsLevel(levels, day)} ${getActiveClassName(levels, day, activeLevel)}`}
 												data-tooltip={`${day === 0 ? 'No' : day} contributions on ${getDay(week, idx)}`}
 											>
 												<span className="sr-only">

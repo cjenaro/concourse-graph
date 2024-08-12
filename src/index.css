@@ -65,8 +65,22 @@ h1 {
 	outline-offset: -1px;
 	outline: 1px solid transparent;
 	transition:
+	    background-color 0.3s ease,
 		opacity 0.3s ease,
 		outline-color 0.3s ease;
+}
+
+@keyframes pulse {
+	from {
+		opacity: 1
+	}
+	to {
+		opacity: 0.3
+	}
+}
+
+.cell.loading {
+	animation: pulse 0.6s ease infinite alternate-reverse;
 }
 
 .cell.active {
