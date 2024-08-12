@@ -8,6 +8,7 @@
 	--bg-color: #0d1117;
 	--tooltip-bg: #151b25;
 	--border-color: #30363d;
+	--color: rgba(255, 255, 255, 0.87);
 
 	--z: 10000;
 	--highlight: 10001;
@@ -17,7 +18,7 @@
 	font-weight: 400;
 
 	color-scheme: light dark;
-	color: rgba(255, 255, 255, 0.87);
+	color: var(--color);
 	background-color: var(--bg-color);
 	font-synthesis: none;
 	text-rendering: optimizeLegibility;
@@ -278,8 +279,8 @@ h1 {
 
 @media (prefers-color-scheme: light) {
 	:root {
-		color: #213547;
-		background-color: #ffffff;
+		--color: #213547;
+		--bg-color: #d6d6d6;
 		--l0-commits: #ebedf0;
 	}
 
@@ -288,7 +289,7 @@ h1 {
 	}
 
 	button {
-		background-color: #f9f9f9;
+		background-color: #e5e5e5;
 	}
 }
 
@@ -374,6 +375,7 @@ h1 {
 
 .highlighted {
 	z-index: var(--highlight);
+	background-color: var(--bg-color);
 }
 
 .highlighted::after {
@@ -385,4 +387,5 @@ h1 {
 	top: 110%;
 	left: 50%;
 	transform: translate(-50%);
+	color: white;
 }
