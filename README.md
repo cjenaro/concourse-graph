@@ -20,7 +20,7 @@ npm run dev
 
 - We can filter out by activity level in the bottom right of the graph.
 - Clicking any day will provide details of the commits in that day.
-- "What was worked on this day?" CTA uses OpenAPI's 4o-mini model to get a summary from the commit messages of that day.
+- "AI Summary" CTA uses OpenAPI's 4o-mini model to get a summary from the commit messages of that day.
 
 ## Decisions
 
