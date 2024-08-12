@@ -147,9 +147,23 @@ export function getMonthLabels(
 	return monthLabels
 }
 
-export async function fetchCommitActivity() {
+export const REPOSITORIES = [
+	'facebook/react',
+	'angular/angular',
+	'emberjs/ember.js',
+	'vercel/next.js',
+	'nuxt/nuxt',
+	'flutter/flutter',
+	'django/django',
+	'rails/rails',
+]
+
+export async function fetchCommitActivity(repo = 'facebook/react') {
+	if (!REPOSITORIES.includes(repo)) {
+		throw new Error('Pick one of the allowed repositories.')
+	}
 	const githubData = await fetch(
-		'https://api.github.com/repos/facebook/react/stats/commit_activity',
+		`https://api.github.com/repos/${repo}/stats/commit_activity`,
 	).then((blob) => blob.json())
 	const result = GithubCommitActivitySchema.safeParse(githubData)
 

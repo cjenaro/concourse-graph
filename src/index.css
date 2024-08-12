@@ -277,6 +277,15 @@ h1 {
 	transform-origin: center;
 }
 
+.search {
+	display: flex;
+	gap: 10px;
+}
+
+.search select {
+	padding: 5px;
+}
+
 @media (prefers-color-scheme: light) {
 	:root {
 		--color: #213547;
@@ -301,7 +310,6 @@ h1 {
 	display: grid;
 	gap: 20px;
 }
-
 
 @keyframes fly-in {
 	from {
