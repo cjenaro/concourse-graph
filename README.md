@@ -1,50 +1,29 @@
-# React + TypeScript + Vite
+# Concourse Graph Interview
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This project was created using the react + typescript vite starter. It's live at [concoursegraph.netlify.app](https://concoursegraph.netlify.app)
 
-Currently, two official plugins are available:
+## How to run
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
-
-- Configure the top-level `parserOptions` property like this:
-
-```js
-export default tseslint.config({
-	languageOptions: {
-		// other options...
-		parserOptions: {
-			project: ['./tsconfig.node.json', './tsconfig.app.json'],
-			tsconfigRootDir: import.meta.dirname,
-		},
-	},
-})
+```bash
+git clone https://github.com/cjenaro/concourse-graph.git
 ```
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
-
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
-
-export default tseslint.config({
-	// Set the react version
-	settings: { react: { version: '18.3' } },
-	plugins: {
-		// Add the react plugin
-		react,
-	},
-	rules: {
-		// other rules...
-		// Enable its recommended rules
-		...react.configs.recommended.rules,
-		...react.configs['jsx-runtime'].rules,
-	},
-})
+```bash
+cd concourse-graph
+npm install
+npm run dev
 ```
+
+## Features
+
+- We can filter out by activity level in the bottom right of the graph.
+- Clicking any day will provide details of the commits in that day.
+- "What was worked on this day?" CTA uses OpenAPI's 4o-mini model to get a summary from the commit messages of that day.
+
+## Decisions
+
+- Vitest for unit testing, much faster than jest and concurrent tests.
+- React router for routing with actions and loaders, simplifies components state loading data outside of the react lifecycle and provides caching.
+- Zod for parsing api responses and runtime type checking.
+- Netlify function to run serverless open api request without exposing API keys.
+- Didn't go with Next or Remix with SSR because it was a small project, otherwise I would've picked one of the two, [here's Remix's](https://remix.run/) website, just in case since it's less known than Next.
