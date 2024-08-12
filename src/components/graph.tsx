@@ -25,8 +25,8 @@ export default function Graph({ data }: GraphProps) {
 	return (
 		<>
 			<p className="description">
-				There were a maximum of {data.max} contributions in any single day, navigate
-				to each day's commits by clicking on the graph
+				There were a maximum of {data.max} contributions in any single day,
+				navigate to each day's commits by clicking on the graph
 			</p>
 			<div ref={ref} className="graph">
 				<div className="graph-scrollable">

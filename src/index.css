@@ -54,6 +54,21 @@ h1 {
 	--gap: 4px;
 }
 
+@media (max-width: 500px) {
+	.container {
+		--size: 20px;
+		--gap: 6px;
+	}
+
+	.graph {
+		padding-bottom: 50px;
+	}
+
+	.comparison {
+		bottom: 13px;
+	}
+}
+
 .cell {
 	border: 0;
 	padding: 0;
