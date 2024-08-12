@@ -8,10 +8,10 @@ export function useAnimatedSummaryText(text?: string) {
 	useGSAP(
 		() => {
 			gsap.from('.summary-animation', {
-                ease: 'none',
+				ease: 'none',
 				text: {
 					value: '',
-                    speed: 3
+					speed: 3,
 				},
 			})
 		},

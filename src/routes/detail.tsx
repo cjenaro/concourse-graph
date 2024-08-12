@@ -15,11 +15,9 @@ import { z } from 'zod'
 import Spinner from '../components/spinner'
 import Sparkles from '../components/sparkles'
 import { useEffect, useState } from 'react'
-import {
-	useAnimatedDayText,
-	useDayFromParams,
-} from '../hooks/use-animated-day-text'
+import { useDayFromParams } from '../hooks/use-animated-day-text'
 import { useAnimatedSummaryText } from '../hooks/use-animated-summary-text'
+import CommitMessage from '../components/commit-message'
 
 export const WeekDayParamsSchema = z.object({
 	week: z.string().transform(Number),
@@ -126,22 +124,8 @@ export default function SingleDayDetails() {
 			</fetcher.Form>
 			{summary}
 			<ul className="commits">
-				{data?.map(({ sha, commit, author, html_url }) => (
-					<li key={sha} className="commit">
-						<a href={html_url} aria-disabled={navigation.state !== 'idle'}>
-							{sha.substring(0, 6)}
-							{navigation.state === 'loading' ? <Spinner /> : null}
-						</a>
-						<img
-							width={20}
-							height={20}
-							src={author.avatar_url}
-							alt="Author profile picture."
-						/>
-						<span>{commit.author.name}</span>
-						<a href={author.html_url}>{author.login}</a>
-						<p>{commit.message}</p>
-					</li>
+				{data?.map((commit) => (
+					<CommitMessage key={commit.sha} commit={commit} />
 				))}
 			</ul>
 		</div>

@@ -13,7 +13,7 @@ const OnboardingContext = createContext<{
 
 type Step = {
 	id: string
-	elementRef: MutableRefObject<HTMLElement | undefined>
+	elementRef: MutableRefObject<HTMLElement | null>
 	message: string
 }
 

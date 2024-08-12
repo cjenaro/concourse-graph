@@ -13,8 +13,8 @@ function getActiveClassName(levels: number, day: number, activeLevel?: number) {
 
 export default function Graph({ data }: GraphProps) {
 	const [activeLevel, setActiveLevel] = useState<number | undefined>()
-	const ref = useRef<HTMLDivElement>()
-	const filtersRef = useRef()
+	const ref = useRef<HTMLDivElement>(null)
+	const filtersRef = useRef(null)
 	const { addStep } = useOnboardingContext()
 
 	useEffect(() => {
