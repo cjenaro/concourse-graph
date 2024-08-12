@@ -487,4 +487,11 @@ button {
 	.comparison {
 		bottom: 13px;
 	}
+
+	.commit span {
+		max-width: 120px;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap
+	}
 }
