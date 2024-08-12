@@ -30,7 +30,6 @@ export const loader: LoaderFunction = async ({ params }) => {
 	const parsedParams = WeekDayParamsSchema.safeParse(params)
 
 	if (!parsedParams.success) {
-		console.error(parsedParams.error.errors)
 		return redirect('/')
 	}
 
@@ -87,10 +86,7 @@ export const action: ActionFunction = async ({ request }) => {
 
 	const result = OpenAPIResponseSchema.safeParse(response)
 
-	console.log(result)
-
 	if (!result.success) {
-		console.log(result.error.errors)
 		return json({
 			error: 'Could not fetch the open api response',
 		})
