@@ -397,6 +397,10 @@ button {
 	height: 2.5ch;
 }
 
+.commit button {
+	grid-column: -1/1;
+}
+
 /* Onboarding */
 
 @keyframes fade-in {
@@ -445,10 +449,12 @@ button {
 
 .ai-summary {
 	--btn-width: 115px;
+	--btn-height: 30px;
 	background-color: #fff2;
 	border-radius: 10px;
 	position: relative;
 	width: var(--btn-width);
+	height: var(--btn-height);
 	max-width: 100%;
 	display: flex;
 	flex-wrap: wrap;

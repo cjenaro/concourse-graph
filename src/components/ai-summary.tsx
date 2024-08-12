@@ -39,8 +39,12 @@ export default function AISummary({
 		})
 		tl.to('.ai-summary', {
 			width: fetcherData?.summary ? 'auto' : 115, //'var(--btn-width)',
-			delay: 0.3,
+			delay: 0.2,
 			duration: 0.3,
+		})
+		tl.to('.ai-summary', {
+			height: fetcherData?.summary ? 'auto' : 30, //'var(--btn-height)',
+ 			duration: 0.3,
 		})
 		tl.from('.cancel-ai', {
 			duration: 0.3,
