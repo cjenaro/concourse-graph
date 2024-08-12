@@ -25,6 +25,8 @@ Here is a list of commit messages from people about what they were working on to
 ${messages}\n
 Give me a quick summary of what was worked on today.
 Avoid any introductions like "Here's a summary...", give me a summary of 6 lines and do not use any MD formatting.
+Do not say anything if there are no messages in the list, just say that nothing was commited that day.
+Fidelity to the messages is 100% priority.
 `
 
 	return fetch('https://api.openai.com/v1/chat/completions', {

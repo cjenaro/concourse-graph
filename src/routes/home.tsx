@@ -7,6 +7,10 @@ import {
 } from '../utils'
 import Graph from '../components/graph'
 import { OnboardingProvider } from '../hooks/use-onboarding-context'
+import {
+	useAnimatedDayText,
+	useDayFromParams,
+} from '../hooks/use-animated-day-text'
 
 export type LoaderResponse = {
 	githubData?: z.infer<typeof GithubCommitActivitySchema>
@@ -48,12 +52,14 @@ export const loader: LoaderFunction = async () => {
 
 function Home() {
 	const data = useLoaderData() as LoaderResponse
+	const title = useAnimatedDayText()
 
 	return (
 		<OnboardingProvider>
 			<div className="container">
 				<h1>Concourse</h1>
 				{data.error ? <p>{data.error}</p> : <Graph data={data} />}
+				{title ? title : null}
 				<Outlet />
 			</div>
 		</OnboardingProvider>

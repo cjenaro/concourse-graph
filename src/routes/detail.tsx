@@ -6,7 +6,6 @@ import {
 	useFetcher,
 	useLoaderData,
 	useNavigation,
-	useParams,
 } from 'react-router-dom'
 import {
 	fetchSingleDayCommits,
@@ -16,8 +15,13 @@ import { z } from 'zod'
 import Spinner from '../components/spinner'
 import Sparkles from '../components/sparkles'
 import { useEffect, useState } from 'react'
+import {
+	useAnimatedDayText,
+	useDayFromParams,
+} from '../hooks/use-animated-day-text'
+import { useAnimatedSummaryText } from '../hooks/use-animated-summary-text'
 
-const WeekDayParamsSchema = z.object({
+export const WeekDayParamsSchema = z.object({
 	week: z.string().transform(Number),
 	day: z.string().transform(Number),
 })
@@ -63,20 +67,6 @@ const OpenAPIResponseSchema = z.object({
 	}),
 })
 
-function useDayFromParams() {
-	const params = useParams()
-	const { week, day } = WeekDayParamsSchema.parse(params)
-	const date = new Date(week * 1000 + day * 24 * 60 * 60 * 1000)
-	const formatter = new Intl.DateTimeFormat('en-US', {
-		timeZone: 'UTC',
-		month: 'long',
-		day: 'numeric',
-		year: 'numeric',
-	})
-
-	return formatter.format(date)
-}
-
 export const action: ActionFunction = async ({ request }) => {
 	const data = await request.formData()
 	const response = await fetch('/api/openapi', {
@@ -102,11 +92,12 @@ export default function SingleDayDetails() {
 	const navigation = useNavigation()
 	const fetcher = useFetcher()
 	const actionData = fetcher.data as { summary?: string; error?: string }
-	const day = useDayFromParams()
 
 	const [fetcherData, setFetcherData] = useState<typeof actionData | null>(
 		actionData,
 	)
+
+	const summary = useAnimatedSummaryText(fetcherData?.summary)
 
 	useEffect(() => {
 		setFetcherData(actionData)
@@ -118,8 +109,7 @@ export default function SingleDayDetails() {
 	}, [navigation.location?.hash])
 
 	return (
-		<>
-			<h3>Details for {day}:</h3>
+		<div className="details-page">
 			<fetcher.Form method="post">
 				<button type="submit" disabled={fetcher.state !== 'idle'}>
 					What was worked on this day?{' '}
@@ -134,7 +124,7 @@ export default function SingleDayDetails() {
 					/>
 				))}
 			</fetcher.Form>
-			<p>{fetcherData?.summary}</p>
+			{summary}
 			<ul className="commits">
 				{data?.map(({ sha, commit, author, html_url }) => (
 					<li key={sha} className="commit">
@@ -154,7 +144,7 @@ export default function SingleDayDetails() {
 					</li>
 				))}
 			</ul>
-		</>
+		</div>
 	)
 }
 
