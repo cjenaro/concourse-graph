@@ -9,7 +9,6 @@ import Graph from '../components/graph'
 import { OnboardingProvider } from '../hooks/use-onboarding-context'
 import {
 	useAnimatedDayText,
-	useDayFromParams,
 } from '../hooks/use-animated-day-text'
 
 export type LoaderResponse = {
