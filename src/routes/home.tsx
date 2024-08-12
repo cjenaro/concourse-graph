@@ -62,7 +62,7 @@ export const loader: LoaderFunction = async ({ request }) => {
 function Home() {
 	const data = useLoaderData() as LoaderResponse
 	const title = useAnimatedDayText()
-	const [params] = useSearchParams()
+	const [params, setParams] = useSearchParams()
 	const fetcher = useFetcher({ key: 'search' })
 
 	return (
@@ -71,7 +71,11 @@ function Home() {
 				<h1>Concourse</h1>
 				<fetcher.Form method="get" className="search">
 					<select
-						onChange={(e) => fetcher.load(`/?repo=${e.target.value}`)}
+						onChange={(e) => {
+							const repo = e.target.value;
+							params.set('repo', repo)
+							setParams(params)
+							fetcher.load(`/?repo=${e.target.value}`)}}
 						name="repo"
 						defaultValue={params.get('repo') || undefined}
 					>

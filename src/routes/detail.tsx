@@ -90,10 +90,10 @@ export const action: ActionFunction = async ({ request }) => {
 }
 
 export default function SingleDayDetails() {
-	const { data } = useLoaderData() as LoaderData
 	const navigation = useNavigation()
+	const { data: commits } = useLoaderData() as LoaderData
 	const location = useLocation()
-	const fetcher = useFetcher()
+	const fetcher = useFetcher({ key: 'commits-fetcher' })
 	const actionData = fetcher.data as { summary?: string; error?: string }
 
 	const [fetcherData, setFetcherData] = useState<typeof actionData | null>(
@@ -123,8 +123,6 @@ export default function SingleDayDetails() {
 		}
 	}, [searchFetcher?.data?.repo])
 
-	const commits = fetcher?.data?.data as LoaderData['data'] || data
-
 	return (
 		<div className="details-page">
 			<fetcher.Form method="post">
@@ -132,7 +130,7 @@ export default function SingleDayDetails() {
 					What was worked on this day?{' '}
 					{fetcher.state !== 'idle' ? <Spinner /> : <Sparkles />}
 				</button>
-				{data.map(({ commit }) => (
+				{commits.map(({ commit }) => (
 					<input
 						key={commit.url}
 						name="messages"
