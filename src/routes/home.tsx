@@ -6,6 +6,7 @@ import {
 	GithubCommitActivitySchema,
 } from '../utils'
 import Graph from '../components/graph'
+import { OnboardingProvider } from '../hooks/use-onboarding-context'
 
 export type LoaderResponse = {
 	githubData?: z.infer<typeof GithubCommitActivitySchema>
@@ -49,11 +50,13 @@ function Home() {
 	const data = useLoaderData() as LoaderResponse
 
 	return (
-		<div className="container">
-			<h1>Concourse</h1>
-			{data.error ? <p>{data.error}</p> : <Graph data={data} />}
-			<Outlet />
-		</div>
+		<OnboardingProvider>
+			<div className="container">
+				<h1>Concourse</h1>
+				{data.error ? <p>{data.error}</p> : <Graph data={data} />}
+				<Outlet />
+			</div>
+		</OnboardingProvider>
 	)
 }
 

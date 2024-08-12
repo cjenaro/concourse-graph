@@ -1,7 +1,8 @@
-import { CSSProperties, useState } from 'react'
+import { CSSProperties, useEffect, useRef, useState } from 'react'
 import { LoaderResponse } from '../routes/home'
 import { getCommitsLevel, getDay } from '../utils'
 import { Link } from 'react-router-dom'
+import useOnboardingContext from '../hooks/use-onboarding-context'
 
 type GraphProps = { data: LoaderResponse }
 
@@ -12,6 +13,25 @@ function getActiveClassName(levels: number, day: number, activeLevel?: number) {
 
 export default function Graph({ data }: GraphProps) {
 	const [activeLevel, setActiveLevel] = useState<number | undefined>()
+	const ref = useRef<HTMLDivElement>()
+	const filtersRef = useRef()
+	const { addStep } = useOnboardingContext()
+
+	useEffect(() => {
+		;[
+			{
+				id: 'graph',
+				elementRef: ref,
+				message:
+					'Clicking on any element in the graph shows the details of that day.',
+			},
+			{
+				id: 'filters',
+				elementRef: filtersRef,
+				message: 'Select a level to filter on the graph.',
+			},
+		].forEach((step) => addStep(step))
+	}, [])
 
 	const levels = Math.floor((data?.max ?? 0) / 4)
 
@@ -24,7 +44,7 @@ export default function Graph({ data }: GraphProps) {
 	return (
 		<>
 			<p>There were a maximum of {data.max} commits in any single day</p>
-			<div className="graph">
+			<div ref={ref} className="graph">
 				<div className="graph-scrollable">
 					<div className="graph-content">
 						<div className="months">
@@ -67,7 +87,7 @@ export default function Graph({ data }: GraphProps) {
 								))}
 							</ul>
 						) : null}
-						<p className="comparison">
+						<p className="comparison" ref={filtersRef}>
 							{activeLevel !== undefined ? (
 								<button
 									onClick={handleLevelFilter(undefined)}

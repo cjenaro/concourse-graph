@@ -9,6 +9,9 @@
 	--tooltip-bg: #151b25;
 	--border-color: #30363d;
 
+	--z: 10000;
+	--highlight: 10001;
+
 	font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
 	line-height: 1.5;
 	font-weight: 400;
@@ -323,4 +326,48 @@ h1 {
 	white-space: nowrap;
 	width: 100%;
 	margin: 0;
+}
+
+/* Onboarding */
+
+@keyframes fade-in {
+	from {
+		opacity: 0;
+	}
+	to {
+		opacity: 1;
+	}
+}
+
+.onboarding {
+	position: fixed;
+	z-index: var(--z);
+	inset: 0;
+	background-color: #0009;
+	animation: fade-in 0.3s ease;
+}
+
+.onboarding button {
+	position: fixed;
+	right: 20px;
+	top: 20px;
+	border: 0;
+	border-radius: 3px;
+	padding: 10px;
+	cursor: pointer;
+}
+
+.highlighted {
+	z-index: var(--highlight);
+}
+
+.highlighted::after {
+	content: attr(data-onboardingmessage);
+	width: max-content;
+	max-width: calc(100dvw - 40px);
+	text-align: center;
+	position: absolute;
+	top: 110%;
+	left: 50%;
+	transform: translate(-50%);
 }
