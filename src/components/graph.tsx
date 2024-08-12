@@ -37,7 +37,7 @@ export default function Graph({ data }: GraphProps) {
 									key={`${idx}${label}`}
 									style={{ '--span': spans } as CSSProperties}
 								>
-									{label}
+									{spans > 1 ? label : ''}
 								</span>
 							))}
 						</div>
