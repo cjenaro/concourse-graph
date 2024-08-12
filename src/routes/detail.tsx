@@ -124,8 +124,8 @@ export default function SingleDayDetails() {
 			</fetcher.Form>
 			{summary}
 			<ul className="commits">
-				{data?.map((commit) => (
-					<CommitMessage key={commit.sha} commit={commit} />
+				{data?.map((commit, idx) => (
+					<CommitMessage key={commit.sha} commit={commit} delay={idx} />
 				))}
 			</ul>
 		</div>

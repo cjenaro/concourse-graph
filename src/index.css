@@ -301,7 +301,20 @@ h1 {
 	gap: 20px;
 }
 
+
+@keyframes fly-in {
+	from {
+		opacity: 0;
+		transform: translateY(-10px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
 .commit {
+	--delay: 0;
 	display: grid;
 	grid-template-columns: 1fr auto max-content auto;
 	gap: 5px;
@@ -309,6 +322,8 @@ h1 {
 	padding: 10px;
 	border-radius: 6px;
 	border: 1px solid var(--border-color);
+	opacity: 0;
+	animation: fly-in 0.3s calc(var(--delay) * 100ms) ease forwards;
 }
 
 .commit > a > svg {
@@ -323,9 +338,9 @@ h1 {
 	grid-column: -1/1;
 	text-overflow: ellipsis;
 	overflow: hidden;
-	white-space: nowrap;
 	width: 100%;
 	margin: 0;
+	height: 2.5ch;
 }
 
 /* Onboarding */
